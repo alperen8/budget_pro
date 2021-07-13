@@ -224,6 +224,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("My Bookkeeper"),
       ),
@@ -276,6 +277,7 @@ class _MainPageState extends State<MainPage> {
                             ),
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(55.0),
@@ -360,7 +362,6 @@ class _MainPageState extends State<MainPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Row(
-                      // adding Income And Expense buttons
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Padding(

@@ -92,7 +92,6 @@ class _EditIncomeState extends State<EditExpense> {
           ),
           TextButton(
             onPressed: () async {
-              print("geldim");
               print(a);
               map.remove(a);
               map.putIfAbsent(

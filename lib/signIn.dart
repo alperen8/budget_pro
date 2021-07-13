@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                           .signIn(
                               _emailController.text, _passwordController.text)
                           .then((value) {
-                        return Navigator.push(
+                        return Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MainPage()));
