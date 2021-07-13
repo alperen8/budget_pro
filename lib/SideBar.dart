@@ -3,9 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:se380final/edit_expense.dart';
 import 'package:se380final/edit_income.dart';
+import 'package:se380final/service/auth.dart';
+import 'package:se380final/signIn.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 String name = "b";
+AuthService _authService = AuthService();
 
 class SideBar extends StatelessWidget {
   Future<String> getUserName() async {
@@ -35,7 +38,7 @@ class SideBar extends StatelessWidget {
               color: Colors.blue,
             ),
             child: Text(
-              'Welcome ' + name,
+              'Extra Options' + name,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -76,6 +79,15 @@ class SideBar extends StatelessWidget {
             title: Text('Friends'),
             onTap: () {
               Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: Text('Logout'),
+            onTap: () {
+              _authService.signOut().then((value) {
+                return Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              });
             },
           ),
         ],
