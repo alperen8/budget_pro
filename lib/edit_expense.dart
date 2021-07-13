@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'SideBar.dart';
 
@@ -8,6 +9,8 @@ class EditExpense extends StatefulWidget {
   @override
   _EditIncomeState createState() => _EditIncomeState();
 }
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class _EditIncomeState extends State<EditExpense> {
   final List<ElevatedButton> buttonsList = [];
@@ -19,7 +22,7 @@ class _EditIncomeState extends State<EditExpense> {
     buttonsList.clear();
     DocumentReference doc = FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI');
+        .doc(_auth.currentUser.uid);
     DocumentSnapshot docSnap = await doc.get();
     Map<String, dynamic> data = docSnap.data();
     Map<String, dynamic> map = Map<String, dynamic>.from(data['expense']);
@@ -44,7 +47,7 @@ class _EditIncomeState extends State<EditExpense> {
   Future<void> editExpense(String a, double b) async {
     DocumentReference doc = FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI');
+        .doc(_auth.currentUser.uid);
     DocumentSnapshot docSnap = await doc.get();
     Map<String, dynamic> data = docSnap.data();
     Map<String, dynamic> map = Map<String, dynamic>.from(data['expense']);
@@ -97,7 +100,7 @@ class _EditIncomeState extends State<EditExpense> {
               print(map);
               FirebaseFirestore.instance
                   .collection("users")
-                  .doc("2ky2fBFlkeRkJskOi3bI")
+                  .doc(_auth.currentUser.uid)
                   .update({"expense": map});
 
               Navigator.pop(context, 'OK');

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'SideBar.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -21,12 +22,14 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final myController = TextEditingController();
   final myController2 = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   int totalExpense = 0;
   int totalIncome = 0;
   int money = 0;
   double piggyMoney = 0;
   bool showMoney = false;
+  var user;
 
   @override
   void dispose() {
@@ -59,7 +62,7 @@ class _MainPageState extends State<MainPage> {
   printIncome() async {
     DocumentReference doc = FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI');
+        .doc(_auth.currentUser.uid);
     DocumentSnapshot docSnap = await doc.get();
     Map<String, dynamic> data = docSnap.data();
     print(data['income']);
@@ -69,7 +72,7 @@ class _MainPageState extends State<MainPage> {
     if (data1 > 0) {
       DocumentReference doc = FirebaseFirestore.instance
           .collection('users')
-          .doc('2ky2fBFlkeRkJskOi3bI');
+          .doc(_auth.currentUser.uid);
       CollectionReference users =
           FirebaseFirestore.instance.collection('users');
       DocumentSnapshot docSnap = await doc.get();
@@ -78,7 +81,7 @@ class _MainPageState extends State<MainPage> {
       map.putIfAbsent(name, () => data1);
 
       return users
-          .doc('2ky2fBFlkeRkJskOi3bI')
+          .doc(_auth.currentUser.uid)
           .update({'income': map})
           .then((value) => print("User Updated"))
           .catchError((error) => print("Failed to update Income: $error"));
@@ -88,7 +91,7 @@ class _MainPageState extends State<MainPage> {
   Future<void> getMoney() async {
     DocumentReference doc = FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI');
+        .doc(_auth.currentUser.uid);
     DocumentSnapshot docSnap = await doc.get();
     Map<String, dynamic> data = docSnap.data();
     setState(() {
@@ -100,7 +103,7 @@ class _MainPageState extends State<MainPage> {
   Future<void> calculateMoney() async {
     await FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI')
+        .doc(_auth.currentUser.uid)
         .update({'money': money + totalIncome - totalExpense});
     setState(() {
       money = money + (totalIncome - totalExpense);
@@ -115,11 +118,11 @@ class _MainPageState extends State<MainPage> {
     });
     FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI')
+        .doc(_auth.currentUser.uid)
         .update({'piggyBank': piggyMoney});
     FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI')
+        .doc(_auth.currentUser.uid)
         .update({'money': money});
   }
 
@@ -130,18 +133,18 @@ class _MainPageState extends State<MainPage> {
     });
     FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI')
+        .doc(_auth.currentUser.uid)
         .update({'piggyBank': 0});
     FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI')
+        .doc(_auth.currentUser.uid)
         .update({'money': money});
   }
 
   Future<void> getPiggy() async {
     DocumentReference doc = FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI');
+        .doc(_auth.currentUser.uid);
     DocumentSnapshot docSnap = await doc.get();
     Map<String, dynamic> data = docSnap.data();
     setState(() {
@@ -153,7 +156,7 @@ class _MainPageState extends State<MainPage> {
     if (data1 > 0) {
       DocumentReference doc = FirebaseFirestore.instance
           .collection('users')
-          .doc('2ky2fBFlkeRkJskOi3bI');
+          .doc(_auth.currentUser.uid);
       CollectionReference users =
           FirebaseFirestore.instance.collection('users');
       DocumentSnapshot docSnap = await doc.get();
@@ -161,7 +164,7 @@ class _MainPageState extends State<MainPage> {
       Map<String, dynamic> map = Map<String, dynamic>.from(data['expense']);
       map.putIfAbsent(name, () => data1);
       return users
-          .doc('2ky2fBFlkeRkJskOi3bI')
+          .doc(_auth.currentUser.uid)
           .update({'expense': map})
           .then((value) => print("User Updated"))
           .catchError((error) => print("Failed to update expense: $error"));
@@ -171,7 +174,7 @@ class _MainPageState extends State<MainPage> {
   Future<void> calculateTotalIncome() async {
     DocumentReference doc = FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI');
+        .doc(_auth.currentUser.uid);
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     DocumentSnapshot docSnap = await doc.get();
     Map<String, dynamic> data = docSnap.data();
@@ -187,7 +190,7 @@ class _MainPageState extends State<MainPage> {
     });
 
     return users
-        .doc('2ky2fBFlkeRkJskOi3bI')
+        .doc(_auth.currentUser.uid)
         .update({'totalIncome': income})
         .then((value) => print("User Updated"))
         .catchError((error) => print("Failed to update Income: $error"));
@@ -196,7 +199,7 @@ class _MainPageState extends State<MainPage> {
   Future<void> calculateTotalExpense() async {
     DocumentReference doc = FirebaseFirestore.instance
         .collection('users')
-        .doc('2ky2fBFlkeRkJskOi3bI');
+        .doc(_auth.currentUser.uid);
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     DocumentSnapshot docSnap = await doc.get();
     Map<String, dynamic> data = docSnap.data();
@@ -212,7 +215,7 @@ class _MainPageState extends State<MainPage> {
     });
 
     return users
-        .doc('2ky2fBFlkeRkJskOi3bI')
+        .doc(_auth.currentUser.uid)
         .update({'totalExpense': expense})
         .then((value) => print("User Updated"))
         .catchError((error) => print("Failed to update Income: $error"));
@@ -343,9 +346,6 @@ class _MainPageState extends State<MainPage> {
                                     child: Text("piggy bank",
                                         textAlign: TextAlign.center)),
                               ),
-                              FloatingActionButton(
-                                  onPressed: () => calculateMoney(),
-                                  child: Text("Simulate"))
                             ],
                           )
                         ],
@@ -622,8 +622,8 @@ print(data['name']);
   }
   */
 /*                              //showdialog
-  
-  
+
+
 
   TextEditingController controller = TextEditingController();
   Future<void> _showMyDialog() async {

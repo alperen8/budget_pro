@@ -1,6 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:se380final/edit_expense.dart';
 import 'package:se380final/edit_income.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+Future<String> getUserName() async {
+  DocumentReference doc =
+      FirebaseFirestore.instance.collection('users').doc(_auth.currentUser.uid);
+  DocumentSnapshot docSnap = await doc.get();
+  Map<String, dynamic> data = docSnap.data();
+  String name = data["userName"];
+  print(name);
+  return name;
+}
 
 class SideBar extends StatelessWidget {
   const SideBar({
@@ -18,7 +32,7 @@ class SideBar extends StatelessWidget {
               color: Colors.blue,
             ),
             child: Text(
-              'Extra Options',
+              'a',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
