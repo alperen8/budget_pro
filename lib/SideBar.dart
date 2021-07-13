@@ -5,21 +5,24 @@ import 'package:se380final/edit_expense.dart';
 import 'package:se380final/edit_income.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-
-Future<String> getUserName() async {
-  DocumentReference doc =
-      FirebaseFirestore.instance.collection('users').doc(_auth.currentUser.uid);
-  DocumentSnapshot docSnap = await doc.get();
-  Map<String, dynamic> data = docSnap.data();
-  String name = data["userName"];
-  print(name);
-  return name;
-}
+String name = "b";
 
 class SideBar extends StatelessWidget {
-  const SideBar({
-    Key? key,
-  }) : super(key: key);
+  Future<String> getUserName() async {
+    DocumentReference doc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(_auth.currentUser.uid);
+    DocumentSnapshot docSnap = await doc.get();
+    Map<String, dynamic> data = docSnap.data();
+    String name = data["userName"];
+    return name;
+  }
+
+  SideBar() {
+    getUserName().then((String result) {
+      name = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,7 @@ class SideBar extends StatelessWidget {
               color: Colors.blue,
             ),
             child: Text(
-              'a',
+              'Welcome ' + name,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
