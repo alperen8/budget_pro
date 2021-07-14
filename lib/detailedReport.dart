@@ -54,6 +54,23 @@ class _DetailedReportState extends State<DetailedReport> {
         });
       }
     });
+    DocumentReference doc2 = FirebaseFirestore.instance
+        .collection('users')
+        .doc(_auth.currentUser.uid);
+    DocumentSnapshot docSnap2 = await doc2.get();
+    Map<String, dynamic> data2 = docSnap2.data();
+    Map<String, dynamic> map2 = Map<String, dynamic>.from(data2['SharedPayments']);
+
+    map2.forEach((key, value) {
+      if (key.contains("Entry")) {
+      } else {
+        setState(() {
+          expenseButtonsList.add(new ElevatedButton(
+              onPressed: () => {editExpense(key, value)},
+              child: Text(key + "  : $value")));
+        });
+      }
+    });
     print(income);
   }
 
@@ -264,6 +281,18 @@ class _DetailedReportState extends State<DetailedReport> {
     double expense = 0;
 
     map.forEach((key, value) {
+      expense = expense + value;
+    });
+    DocumentReference doc2 = FirebaseFirestore.instance
+        .collection('users')
+        .doc(_auth.currentUser.uid);
+    CollectionReference users2 = FirebaseFirestore.instance.collection('users');
+    DocumentSnapshot docSnap2 = await doc2.get();
+    Map<String, dynamic> data2 = docSnap2.data();
+    Map<String, dynamic> map2 = Map<String, dynamic>.from(data2['expense']);
+
+
+    map2.forEach((key, value) {
       expense = expense + value;
     });
     print(expense);

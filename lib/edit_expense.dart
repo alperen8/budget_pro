@@ -106,7 +106,7 @@ class _EditIncomeState extends State<EditExpense> {
               Navigator.pop(context, 'OK');
               myController.text = '';
               myController2.text = '';
-              getExpenseAsButton();
+
               Navigator.popUntil(context, ModalRoute.withName('/MainPage'));
               // ignore: unnecessary_statements
               Navigator.pop;
@@ -114,6 +114,7 @@ class _EditIncomeState extends State<EditExpense> {
                   MaterialPageRoute(builder: (context) => Main_Page()));
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => EditExpense()));
+              getExpenseAsButton();
             },
             child: const Text('OK'),
           ),

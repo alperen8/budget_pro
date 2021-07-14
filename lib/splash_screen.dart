@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:se380final/detailedReport.dart';
 import 'package:se380final/mainPage.dart';
 import 'package:se380final/signIn.dart';
 

@@ -38,6 +38,7 @@ class AuthService {
       'totalExpense': 0,
       'totalIncome': 0,
       'friends': {},
+      'sharedPayments':{}
     });
 
     return user.user;

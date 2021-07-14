@@ -22,13 +22,6 @@ class _FriendsState extends State<Friends> {
   }
 
   addFriend() async {
-    DocumentReference doc = FirebaseFirestore.instance
-        .collection('users')
-        .doc(_auth.currentUser.uid);
-    DocumentSnapshot docSnap = await doc.get();
-    Map<String, dynamic> data = docSnap.data();
-    Map<String, dynamic> map = Map<String, dynamic>.from(data['friends']);
-
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -58,9 +51,10 @@ class _FriendsState extends State<Friends> {
           TextButton(
             onPressed: () async {
               if (FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(myController.text) !=
-                  null) {
+                          .collection("users")
+                          .doc(myController.text) !=
+                      null &&
+                  myController.text != _auth.currentUser.uid) {
                 print("kişi bulundu");
                 DocumentReference doc = FirebaseFirestore.instance
                     .collection('users')
@@ -78,8 +72,8 @@ class _FriendsState extends State<Friends> {
                 Map<String, dynamic> map2 =
                     Map<String, dynamic>.from(data2['friends']);
                 String name2 = data2['userName'];
-                map.putIfAbsent(name2, () => 555);
-                map2.putIfAbsent(name1, () => 666);
+                map.putIfAbsent(_auth.currentUser.uid, () => name2);
+                map2.putIfAbsent(myController.text, () => name1);
                 print(map);
                 print(map2);
                 FirebaseFirestore.instance
@@ -94,7 +88,7 @@ class _FriendsState extends State<Friends> {
               Navigator.pop(context, 'OK');
               myController.text = '';
               getFriendsAsButton();
-              Navigator.popUntil(context, ModalRoute.withName('/MainPage'));
+              Navigator.popUntil(context, ModalRoute.withName('/Main_Page'));
               // ignore: unnecessary_statements
               Navigator.pop;
               Navigator.push(context,
@@ -124,7 +118,7 @@ class _FriendsState extends State<Friends> {
       } else {
         setState(() {
           buttonsList.add(new ElevatedButton(
-              onPressed: () => {removeFriend(key)}, child: Text(key)));
+              onPressed: () => {removeFriend(value, key)}, child: Text(value)));
         });
       }
     });
@@ -133,7 +127,7 @@ class _FriendsState extends State<Friends> {
   final myController = TextEditingController();
   final myController2 = TextEditingController();
 
-  Future<void> removeFriend(String _name) async {
+  Future<void> removeFriend(String _name, String value) async {
     String name = _name;
     DocumentReference doc = FirebaseFirestore.instance
         .collection('users')
@@ -162,7 +156,17 @@ class _FriendsState extends State<Friends> {
           ),
           TextButton(
             onPressed: () async {
-              map.remove(name);
+              map.remove(value);
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(_auth.currentUser.uid)
+                  .update({"friends": map});
+              DocumentReference doc =
+                  FirebaseFirestore.instance.collection('users').doc(value);
+              DocumentSnapshot docSnap = await doc.get();
+              Map<String, dynamic> data = docSnap.data();
+              map = Map<String, dynamic>.from(data['friends']);
+              map.remove(_auth.currentUser.uid);
               FirebaseFirestore.instance
                   .collection("users")
                   .doc(_auth.currentUser.uid)
@@ -172,7 +176,7 @@ class _FriendsState extends State<Friends> {
               myController.text = '';
               myController2.text = '';
               getFriendsAsButton();
-              Navigator.popUntil(context, ModalRoute.withName('/MainPage'));
+              Navigator.popUntil(context, ModalRoute.withName('/Main_Page'));
               // ignore: unnecessary_statements
               Navigator.pop;
               Navigator.push(context,

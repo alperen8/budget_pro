@@ -199,6 +199,7 @@ class _MainPageState extends State<Main_Page> {
     map.forEach((key, value) {
       income = income + value;
     });
+
     print(income);
     setState(() {
       totalIncome = income.toInt();
@@ -222,6 +223,17 @@ class _MainPageState extends State<Main_Page> {
     double expense = 0;
 
     map.forEach((key, value) {
+      expense = expense + value;
+    });
+    DocumentReference doc1 = FirebaseFirestore.instance
+        .collection('users')
+        .doc(_auth.currentUser.uid);
+    CollectionReference users1 = FirebaseFirestore.instance.collection('users');
+    DocumentSnapshot docSnap1 = await doc1.get();
+    Map<String, dynamic> data1 = docSnap1.data();
+    Map<String, dynamic> map1 =
+        Map<String, dynamic>.from(data1['sharedPayments']);
+    map1.forEach((key, value) {
       expense = expense + value;
     });
     print(expense);
@@ -469,10 +481,6 @@ class _MainPageState extends State<Main_Page> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          'Welcome, $name',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
                         Row(
                           children: <Widget>[
                             Column(
