@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:se380final/main.dart';
-import 'package:se380final/main_page.dart';
+import 'package:se380final/mainPage.dart';
 import 'package:se380final/register.dart';
 import 'service/auth.dart';
 
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                         return Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MainPage()));
+                                builder: (context) => Main_Page()));
                       });
                     },
                     child: Container(

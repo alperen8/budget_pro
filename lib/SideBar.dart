@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:se380final/detailedReport.dart';
 import 'package:se380final/edit_expense.dart';
 import 'package:se380final/edit_income.dart';
+import 'package:se380final/friend.dart';
 import 'package:se380final/service/auth.dart';
 import 'package:se380final/signIn.dart';
+
+import 'mainPage.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 String name = "b";
@@ -38,7 +42,7 @@ class SideBar extends StatelessWidget {
               color: Colors.blue,
             ),
             child: Text(
-              'Extra Options' + name,
+              'Extra Options',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -48,27 +52,38 @@ class SideBar extends StatelessWidget {
           ListTile(
             title: Text('Edit Incomes'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditIncome()),
-              );
+              Navigator.popUntil(context, ModalRoute.withName('/MainPage'));
+              // ignore: unnecessary_statements
+              Navigator.pop;
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Main_Page()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EditIncome()));
             },
           ),
           ListTile(
             title: Text('Edit Expenses'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditExpense()),
-              );
+              Navigator.popUntil(context, ModalRoute.withName('/MainPage'));
+              // ignore: unnecessary_statements
+              Navigator.pop;
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Main_Page()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EditExpense()));
             },
           ),
           ListTile(
-            title: Text('Detailed Report'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
+              title: Text('Detailed Report'),
+              onTap: () {
+                Navigator.popUntil(context, ModalRoute.withName('/MainPage'));
+                // ignore: unnecessary_statements
+                Navigator.pop;
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Main_Page()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DetailedReport()));
+              }),
           ListTile(
             title: Text('Shared payments'),
             onTap: () {
@@ -78,13 +93,20 @@ class SideBar extends StatelessWidget {
           ListTile(
             title: Text('Friends'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.popUntil(context, ModalRoute.withName('/MainPage'));
+              // ignore: unnecessary_statements
+              Navigator.pop;
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Main_Page()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Friends()));
             },
           ),
           ListTile(
             title: Text('Logout'),
             onTap: () {
               _authService.signOut().then((value) {
+                Navigator.popUntil(context, ModalRoute.withName('/LoginPage'));
                 return Navigator.push(context,
                     MaterialPageRoute(builder: (context) => LoginPage()));
               });

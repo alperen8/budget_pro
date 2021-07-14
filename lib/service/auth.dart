@@ -29,6 +29,7 @@ class AuthService {
         .update({'value': value + 1});
     await _firestore.collection("users").doc(user.user.uid).set({
       'userName': name,
+      'password':password,
       'email': email,
       'expense': {},
       'income': {},
@@ -36,7 +37,6 @@ class AuthService {
       'piggyBank': 0,
       'totalExpense': 0,
       'totalIncome': 0,
-      'userID': 100 + 5 * value,
       'friends': {},
     });
 

@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:se380final/friends.dart';
 import 'package:se380final/splash_screen.dart';
 
 main() async {

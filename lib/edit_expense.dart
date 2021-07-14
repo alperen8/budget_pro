@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'SideBar.dart';
+import 'mainPage.dart';
 
 class EditExpense extends StatefulWidget {
   const EditExpense({Key? key}) : super(key: key);
@@ -106,6 +107,13 @@ class _EditIncomeState extends State<EditExpense> {
               myController.text = '';
               myController2.text = '';
               getExpenseAsButton();
+              Navigator.popUntil(context, ModalRoute.withName('/MainPage'));
+              // ignore: unnecessary_statements
+              Navigator.pop;
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Main_Page()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EditExpense()));
             },
             child: const Text('OK'),
           ),
